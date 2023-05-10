@@ -12,18 +12,20 @@ import {
 import { useState, useEffect } from "react";
 import axiosUtil from "../utils/axiosUtil";
 import { useParams } from "react-router-dom";
+import printDate from "../utils/formatDate";
 
 const Event = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [event, setEvent] = useState({});
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
+  const [categories, setCategories] = useState([]);
   let { id } = useParams();
 
   const fetchEvent = async () => {
     try {
       let response = await axiosUtil.get(`/event/read.php?id=${id}`);
-      console.log(response);
       setEvent(response.data);
+
       setLoading(false);
     } catch ({ response }) {
       console.log(response);
@@ -37,6 +39,11 @@ const Event = () => {
   };
   useEffect(() => {
     fetchEvent();
+
+    axiosUtil.get(`/category/read.php`).then((response) => {
+      console.log(response.data);
+      setCategories(response.data);
+    });
   }, []);
 
   return (
@@ -72,19 +79,22 @@ const Event = () => {
                   color="text.secondary"
                   sx={{ fontWeight: "600" }}
                 >
-                  {event.category} | {event.location} | 5th May
+                  {
+                    categories?.filter((cat) => cat.id === event.category_id)[0]
+                      ?.name
+                  }{" "}
+                  | {event.location} |{" "}
+                  {printDate(event.start_time, event.end_time)}
                 </Typography>
               </Box>
             </CardContent>
           </Card>
           <Grid container spacing={2}>
-            <Grid item xs={3}>
+            <Grid item xs={9}>
               <Paper elevation={1} sx={{ mt: 3, p: 3 }}>
-                <Typography>{event.description}</Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <Paper elevation={1} sx={{ mt: 3, p: 3 }}>
+                <Typography variant={"h6"} sx={{ mb: 1 }}>
+                  Description
+                </Typography>
                 <Typography>{event.description}</Typography>
               </Paper>
             </Grid>
@@ -93,11 +103,7 @@ const Event = () => {
                 <Typography variant={"h6"} sx={{ mb: 1 }}>
                   Hosted By
                 </Typography>
-                {/* <Box>
-              <Avatar src={event.author.image} alt={event.author.name} />
-              <Typography>{event.author.name}</Typography>
-            </Box> */}
-                {/* <Card elevation={0}>
+                <Card elevation={0}>
                   <CardHeader
                     sx={{ p: 0 }}
                     avatar={
@@ -111,7 +117,7 @@ const Event = () => {
                     title={event.author.name}
                     subheader="September 14, 2016"
                   />
-                </Card> */}
+                </Card>
               </Paper>
             </Grid>
           </Grid>

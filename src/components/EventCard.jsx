@@ -6,18 +6,18 @@ import {
   CardActionArea,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import printDate from "../utils/formatDate";
 
 const EventCard = ({
   name,
-  start_date,
-  end_date,
+  start_time,
+  end_time,
   location,
   description,
   banner_image,
   slug,
   event_id,
 }) => {
-  console.log(start_date, end_date);
   return (
     <Card elevation={1}>
       <CardActionArea component={Link} to={"/event/" + event_id}>
@@ -37,7 +37,7 @@ const EventCard = ({
             component="div"
             color="primary"
           >
-            {location} | {start_date}
+            {location} | {printDate(start_time, end_time)}
           </Typography>
           <Typography
             variant="body2"
