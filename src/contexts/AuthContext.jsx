@@ -8,12 +8,12 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [token, setToken] = useState<string | null>();
+  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState();
   const [currentUserData, setCurrentUserData] = useState(null);
-  const [verifiedEmail, setVerifiedEmail] = useState<boolean>(false);
+  const [verifiedEmail, setVerifiedEmail] = useState(false);
 
   const googleProvider = new GoogleAuthProvider();
   const signInWithGoogle = async () => {

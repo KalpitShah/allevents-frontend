@@ -40,16 +40,7 @@ const CreateEvent = () => {
     banner_image: "",
   });
 
-  const [errors, setErrors] = useState<{
-    name?: string;
-    start_time?: string;
-    end_time?: string;
-    description?: string;
-    category?: string;
-    city?: string;
-    location?: string;
-    banner_image?: string;
-  }>({});
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setForm({
@@ -66,16 +57,7 @@ const CreateEvent = () => {
   };
 
   const validateForm = () => {
-    let formErrors: {
-      name?: string;
-      start_time?: string;
-      end_time?: string;
-      description?: string;
-      category?: string;
-      city?: string;
-      location?: string;
-      banner_image?: string;
-    } = {};
+    let formErrors = {};
 
     // Add your form validation logic here
     // For example:

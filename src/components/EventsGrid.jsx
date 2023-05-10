@@ -5,13 +5,13 @@ import axiosUtil from "../utils/axiosUtil";
 
 const EventsGrid = () => {
   const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchEvents = async () => {
     try {
       let response = await axiosUtil.get(`/event/read.php`);
-      console.log(response);
+      console.log(response.data);
       setEvents(response.data);
       setLoading(false);
     } catch ({ response }) {
@@ -46,7 +46,7 @@ const EventsGrid = () => {
           <Grid container spacing={2}>
             {events.map((event) => (
               <Grid item xs={4}>
-                <EventCard {...event} />
+                <EventCard {...event} key={event.event_id} />
               </Grid>
             ))}
           </Grid>

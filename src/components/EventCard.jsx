@@ -1,24 +1,12 @@
 import {
   Card,
   CardContent,
-  CardHeader,
   CardMedia,
-  Paper,
   Typography,
   CardActionArea,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
-interface EventCardProps {
-  name: string;
-  start_date: string;
-  end_date: string;
-  location: string;
-  description: string;
-  banner_image: string;
-  slug: string;
-  event_id: string;
-}
 const EventCard = ({
   name,
   start_date,
@@ -28,7 +16,8 @@ const EventCard = ({
   banner_image,
   slug,
   event_id,
-}: EventCardProps) => {
+}) => {
+  console.log(start_date, end_date);
   return (
     <Card elevation={1}>
       <CardActionArea component={Link} to={"/event/" + event_id}>

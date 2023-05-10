@@ -79,7 +79,7 @@ const pages = [
 const settings = [
   { text: "Profile", link: "/profile" },
   { text: "Create Event", link: "/event/create" },
-  { text: "Manage my Events", link: "/profile/events" },
+  //   { text: "Manage my Events", link: "/profile/events" },
   { text: "Logout", link: "/logout" },
 ];
 
@@ -89,7 +89,7 @@ function Navbar() {
   const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [search, setSearch] = React.useState<string>("");
+  const [search, setSearch] = React.useState("");
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -99,7 +99,7 @@ function Navbar() {
     setAnchorElUser(null);
   };
 
-  const toggleDrawer = (open: boolean) => (event: any) => {
+  const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
