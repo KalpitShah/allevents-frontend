@@ -115,7 +115,7 @@ const Event = () => {
                       </Avatar>
                     }
                     title={event.author.name}
-                    subheader="September 14, 2016"
+                    subheader="Allevents User"
                   />
                 </Card>
               </Paper>
