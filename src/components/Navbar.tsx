@@ -1,28 +1,103 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import {
+  Avatar,
   Drawer,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Typography,
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  InputBase,
 } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { styled, alpha } from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
+
+const Logo = styled("img")(({ theme }) => ({
+  height: 30,
+  [theme.breakpoints.up("sm")]: {
+    height: 50,
+  },
+}));
+
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    width: "auto",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "20ch",
+      "&:focus": {
+        width: "30ch",
+      },
+    },
+  },
+}));
 
 const pages = [
-  { text: "Home", link: "/" },
-  { text: "Project Summary", link: "/summary" },
+  { text: "Explore Events", link: "/" },
+  { text: "Create Event", link: "/event/create" },
+];
+
+const settings = [
+  { text: "Profile", link: "/profile" },
+  { text: "Create Event", link: "/event/create" },
+  { text: "Manage my Events", link: "/profile/events" },
+  { text: "Logout", link: "/logout" },
 ];
 
 function Navbar() {
+  const { currentUser, loading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [search, setSearch] = React.useState<string>("");
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   const toggleDrawer = (open: boolean) => (event: any) => {
     if (
@@ -44,13 +119,20 @@ function Navbar() {
       onKeyDown={toggleDrawer(false)}
     >
       <Box
-        sx={{ pl: 2, pt: 3, pb: 2, backgroundColor: "var(--color-secondary)" }}
+        sx={{
+          pl: 2,
+          pt: 3,
+          pb: 2,
+          backgroundColor: "var(--color-secondary)",
+        }}
       >
-        <img
-          style={{ maxHeight: 40 }}
-          src="/ae-logo-website.webp"
-          alt="Allevents Logo"
-        />
+        <Link to="/">
+          <img
+            style={{ maxHeight: 40 }}
+            src="/ae-logo-website.webp"
+            alt="Allevents Logo"
+          />
+        </Link>
       </Box>
       <List>
         {pages.map((page) => (
@@ -80,16 +162,73 @@ function Navbar() {
     </Box>
   );
 
+  const avatar = () => {
+    return (
+      <Box sx={{ flexGrow: 0, my: "auto", ml: 4 }}>
+        <Tooltip title="Open settings">
+          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Avatar alt={currentUser.displayName} src={currentUser.photoURL} />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          sx={{ mt: "45px" }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          {settings.map((setting, index) => (
+            <MenuItem
+              key={index}
+              onClick={handleCloseUserMenu}
+              component={Link}
+              to={setting.link}
+            >
+              <Typography textAlign="center">{setting.text}</Typography>
+            </MenuItem>
+          ))}
+        </Menu>
+      </Box>
+    );
+  };
+
+  const keyPress = (e) => {
+    if (e.keyCode == 13) {
+      navigate("/?search=" + search);
+    }
+  };
+
   return (
     <React.Fragment>
       <AppBar color="secondary" position="static" elevation={2}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <img
-              style={{ maxHeight: 50 }}
-              src="/ae-logo-website.webp"
-              alt="Allevents Logo"
-            />
+            <Box sx={{ my: 1 }}>
+              <Link to="/">
+                <Logo src="/ae-logo-website.webp" alt="Allevents Logo" />
+              </Link>
+            </Box>
+            <Search sx={{ ml: 4 }}>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => keyPress(e)}
+              />
+            </Search>
 
             <Box
               sx={{
@@ -134,18 +273,24 @@ function Navbar() {
                   {page.text}
                 </Button>
               ))}
-              <Button
-                variant="contained"
-                to="/login"
-                component={Link}
-                sx={{
-                  my: 2,
-                  ml: 2,
-                  display: "block",
-                }}
-              >
-                Login
-              </Button>
+              {loading ? (
+                ""
+              ) : currentUser ? (
+                avatar()
+              ) : (
+                <Button
+                  variant="contained"
+                  to={"/login"}
+                  component={Link}
+                  sx={{
+                    my: 2,
+                    ml: 2,
+                    display: "block",
+                  }}
+                >
+                  Login
+                </Button>
+              )}
             </Box>
           </Toolbar>
         </Container>

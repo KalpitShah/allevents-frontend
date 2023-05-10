@@ -1,5 +1,11 @@
+import EventsGrid from "../components/EventsGrid";
+
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div>
+      <EventsGrid />
+    </div>
+  );
 };
 
 export default Home;
