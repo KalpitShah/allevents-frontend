@@ -120,7 +120,7 @@ const CreateEvent = () => {
           id="start_time"
           label="Start Time"
           variant="outlined"
-          type="datetime-local"
+          type="date"
           InputLabelProps={{ shrink: true }}
           onChange={handleChange}
           error={!!errors.start_time}

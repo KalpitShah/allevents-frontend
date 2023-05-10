@@ -77,7 +77,7 @@ const pages = [
 ];
 
 const settings = [
-  { text: "Profile", link: "/profile" },
+  // { text: "Profile", link: "/profile" },
   { text: "Create Event", link: "/event/create" },
   //   { text: "Manage my Events", link: "/profile/events" },
   { text: "Logout", link: "/logout" },
@@ -217,7 +217,7 @@ function Navbar() {
                 <Logo src="/ae-logo-website.webp" alt="Allevents Logo" />
               </Link>
             </Box>
-            <Search sx={{ ml: 4 }}>
+            {/* <Search sx={{ ml: 4 }}>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
@@ -228,7 +228,7 @@ function Navbar() {
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={(e) => keyPress(e)}
               />
-            </Search>
+            </Search> */}
 
             <Box
               sx={{
