@@ -69,6 +69,7 @@ const EventsGrid = () => {
       )
       .then((response) => {
         setEvents(response.data);
+        setLoading(false);
       })
       .catch(({ response }) => {
         console.log(response);
