@@ -52,4 +52,4 @@ Start the application by running:
 npm run dev
 ```
 
-Now, you should be able to see the project running at localhost:3000.
+Now, you should be able to see the project running at localhost:5173.
